@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Runeheim Music Soundtrack</title>
+<meta name="description" content="Listen to every song of Runeheim Music, the Valheim soundtrack mod, grouped by where it plays in the game.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+/* Layout: a mod-page-style listening page. Crest title, preset switch, songs grouped by where they play in Valheim,
+   one shared player bar pinned to the bottom. One deliberate dark look: Runeheim UI's gold on blue-black. */
+:root{
+  --bg:#0c0e12; --plate:#151820; --plate-hi:#1c2029; --line:#2b2f3a;
+  --gold:#e6bc4c; --gold-dim:#a8873a; --ink:#e8e2d3; --muted:#9a9384;
+  --display:"Cinzel", "Trajan Pro", Georgia, serif; --body:"EB Garamond", Garamond, Georgia, serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{margin:0;color:var(--ink);font:18px/1.5 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 120px}
+.wrap{max-width:860px;margin:0 auto;display:grid;gap:28px}
+header{display:grid;justify-items:center;gap:10px;padding-block:36px 6px;text-align:center}
+.crest{width:min(420px,100%);height:2px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);position:relative}
+.crest::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:12px;border:1px solid var(--gold);background:var(--bg);transform:translate(-50%,-50%) rotate(45deg)}
+h1{margin:0;font:700 clamp(2rem,6vw,3.2rem)/1.05 var(--display);letter-spacing:.06em;color:var(--gold);text-wrap:balance}
+.tag{margin:0;color:var(--muted);font-style:italic;max-width:56ch}
+.back{color:var(--gold);font:500 15px var(--display);letter-spacing:.06em;text-decoration:none;border-bottom:1px solid var(--gold-dim)}
+.presets{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.chip{font:500 15px var(--display);letter-spacing:.06em;color:var(--muted);background:var(--plate);border:1px solid var(--line);border-radius:999px;padding:7px 16px;cursor:pointer}
+.chip[aria-pressed="true"]{color:var(--bg);background:var(--gold);border-color:var(--gold)}
+.chip:focus-visible,.play:focus-visible,.pbtn:focus-visible,.back:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+section{display:grid;gap:10px}
+h2{margin:0;font:600 1.05rem var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--gold-dim);display:flex;align-items:center;gap:12px}
+h2::after{content:"";flex:1;height:1px;background:var(--line)}
+.list{display:grid;gap:6px}
+.song{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:14px;background:var(--plate);border:1px solid var(--line);border-radius:10px;padding:8px 14px 8px 8px}
+.song.on{border-color:var(--gold-dim);background:var(--plate-hi)}
+.play{width:44px;height:44px;border-radius:50%;border:1px solid var(--gold-dim);background:transparent;color:var(--gold);display:grid;place-items:center;cursor:pointer}
+.play svg{width:16px;height:16px;fill:currentColor}
+.name{min-width:0}
+.name b{display:block;font:600 1.08rem var(--display);letter-spacing:.03em;color:var(--ink)}
+.name span{display:block;color:var(--muted);font-size:15px}
+.foot{color:var(--muted);font-size:15px;text-align:center}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#0f1218ee;border-top:1px solid var(--line);padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));backdrop-filter:blur(6px)}
+.bar .in{max-width:860px;margin:0 auto;display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:center}
+.pbtn{width:44px;height:44px;border-radius:50%;border:none;background:var(--gold);color:var(--bg);display:grid;place-items:center;cursor:pointer}
+.pbtn svg{width:16px;height:16px;fill:currentColor}
+.now{min-width:0;display:grid;gap:6px}
+.now b{font:600 1rem var(--display);letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--gold)}
+@media (max-width:480px){.song{grid-template-columns:40px minmax(0,1fr)}.play{width:40px;height:40px}}
+@media (prefers-reduced-motion:no-preference){.song{transition:border-color .2s,background .2s}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="crest" aria-hidden="true"></div>
+    <h1>Runeheim Music</h1>
+    <p class="tag">The full soundtrack of Runeheim Music. Every song plays in game where its name says: on the menu, in each biome, at your base, at sea and against the bosses.</p>
+    <a class="back" href="https://valheim.hexium.gg/mods/Daytreee/RuneheimMusic">Get the mod</a>
+    <div class="presets" role="group" aria-label="Soundtrack preset">
+      <button class="chip" id="p2" aria-pressed="true">Runeheim II</button>
+      <button class="chip" id="p1" aria-pressed="false">Runeheim I</button>
+    </div>
+  </header>
+  <div id="groups"></div>
+  <p class="foot">Runeheim II is the default soundtrack. Pick a preset in game: F8 &rsaquo; Mods &rsaquo; Runeheim Music.</p>
+</div>
+
+<div class="bar" aria-live="polite">
+  <div class="in">
+    <button class="pbtn" id="pp" aria-label="Play"></button>
+    <div class="now">
+      <b id="nowName">Pick a song to listen</b>
+      <div class="track"><span id="tCur">0:00</span><input type="range" id="seek" min="0" max="1000" value="0" aria-label="Position"><span id="tLen">0:00</span></div>
+    </div>
+  </div>
+</div>
+<audio id="au" preload="none"></audio>
+
+<script>
+const PLAY='<svg viewBox="0 0 16 16"><path d="M4 2l10 6-10 6z"/></svg>', PAUSE='<svg viewBox="0 0 16 16"><path d="M3 2h4v12H3zM9 2h4v12H9z"/></svg>';
+const FOLDER={"Runeheim II":"runeheim2","Runeheim I":"runeheim1"};
+const SETS={
+ "Runeheim II":[
+  ["Menu & story",[["menu","Main Menu","The title screen"],["intro","Arrival","The Valkyrie's flight to the Meadows"],["credits","Credits","After the last boss"]]],
+  ["Time of day",[["morning","Morning","Each new day"],["evening","Evening","As night falls"]]],
+  ["Biomes",[["meadows","Meadows","Exploring the Meadows"],["blackforest","Black Forest","Under the dark pines"],["swamp","Swamp","Through the rain and rot"],["mountain","Mountain","On the frozen peaks"],["plains","Plains","Across the golden plains"],["mistlands","Mistlands","Inside the mist"],["ashlands","Ashlands","In the burning south"]]],
+  ["At sea",[["sailing","Sailing","Out on the ocean"],["sailing_ashlands","Ashlands Sea","Sailing the boiling sea"]]],
+  ["Home & battle",[["home","Your Base","Resting at home"],["combat","Combat","When enemies close in"],["CombatEventL1","Raid I","An early raid"],["CombatEventL2","Raid II","A stronger raid"],["CombatEventL3","Raid III","A late raid"],["CombatEventL4","Raid IV","The fiercest raids"]]],
+  ["Bosses",[["boss_eikthyr","Boss: Eikthyr","The first Forsaken"],["boss_moder","Boss: Moder","The dragon mother"]]]],
+ "Runeheim I":[
+  ["Menu & story",[["menu","Main Menu","The title screen"],["intro","Arrival","The Valkyrie's flight to the Meadows"],["credits","Credits","After the last boss"]]],
+  ["Time of day",[["morning","Morning","Each new day"],["evening","Evening","As night falls"]]],
+  ["Biomes",[["meadows","Meadows","Exploring the Meadows"],["blackforest","Black Forest","Under the dark pines"],["swamp","Swamp","Through the rain and rot"],["mountain","Mountain","On the frozen peaks"],["plains","Plains","Across the golden plains"],["mistlands","Mistlands","Inside the mist"],["ashlands","Ashlands","In the burning south"]]],
+  ["At sea",[["sailing","Sailing","Out on the ocean"],["sailing_ashlands","Ashlands Sea","Sailing the boiling sea"]]],
+  ["Home & battle",[["home","Your Base","Resting at home"],["combat","Combat","When enemies close in"],["CombatEventL1","Raid I","An early raid"],["CombatEventL2","Raid II","A stronger raid"],["CombatEventL3","Raid III","A late raid"],["CombatEventL4","Raid IV","The fiercest raids"]]],
+  ["Dungeons & places",[["forestcrypt","Burial Chambers","In the Black Forest's crypts"],["forestcrypthildir","Hildir's Crypt","Hildir's burial chamber"],["frostcaves","Frost Caves","Deep in the mountain caves"],["frostcaveshildir","Hildir's Cave","Hildir's frost cave"],["plainstower","Plains Tower","Hildir's tower on the plains"],["location_forest","Forest Ruins","Old stones in the Black Forest"],["location_haldor","Haldor","The trader's camp"],["location_dvergrtower","Dvergr Tower","A dvergr outpost in the mist"],["location_dvergrexc","Dvergr Excavation","A dvergr dig site"],["location_ashlands_ruins","Ashlands Ruins","The fortress ruins of the south"]]],
+  ["Bosses",[["boss_eikthyr","Boss: Eikthyr","The first Forsaken"],["boss_gdking","Boss: The Elder","The ancient of the forest"],["boss_bonemass","Boss: Bonemass","The swamp's rotting giant"],["boss_moder","Boss: Moder","The dragon mother"],["boss_goblinking","Boss: Yagluth","The fallen king of the plains"],["boss_queen","Boss: The Queen","The seeker queen"],["boss_queen_ambience","The Queen's Lair","Before the queen wakes"],["boss_fader","Boss: Fader","The last of the Forsaken"]]]]
+};
+const au=document.getElementById("au"), groups=document.getElementById("groups");
+let set="Runeheim II", current=null;
+const fmt=s=>!isFinite(s)?"0:00":Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0");
+const same=(f)=>current&&current.file===f&&current.set===set;
+
+function render(){
+  groups.textContent=""; groups.className="wrap";
+  for(const [g,songs] of SETS[set]){
+    const sec=document.createElement("section"); const h=document.createElement("h2"); h.textContent=g; sec.append(h);
+    const list=document.createElement("div"); list.className="list";
+    for(const [file,title,where] of songs){
+      const row=document.createElement("div"); row.className="song"; row.dataset.file=file;
+      const b=document.createElement("button"); b.className="play"; b.innerHTML=PLAY; b.setAttribute("aria-label","Play "+title);
+      b.onclick=()=>pick(file,title);
+      const n=document.createElement("div"); n.className="name";
+      const t=document.createElement("b"); t.textContent=title; const w=document.createElement("span"); w.textContent=where;
+      n.append(t,w); row.append(b,n); list.append(row);
+    }
+    sec.append(list); groups.append(sec);
+  }
+  sync();
+}
+function pick(file,title){
+  if(same(file)){au.paused?au.play():au.pause();return}
+  current={file,title,set}; au.src="songs/"+FOLDER[set]+"/"+file+".mp3"; au.play().catch(()=>{});
+  document.getElementById("nowName").textContent=set+" · "+title; sync();
+}
+function sync(){
+  document.querySelectorAll(".song").forEach(r=>{const on=same(r.dataset.file);r.classList.toggle("on",on);r.querySelector(".play").innerHTML=on&&!au.paused?PAUSE:PLAY});
+  const pp=document.getElementById("pp"); pp.innerHTML=au.paused?PLAY:PAUSE; pp.setAttribute("aria-label",au.paused?"Play":"Pause");
+}
+document.getElementById("pp").onclick=()=>{if(!current){pick("menu","Main Menu");return}au.paused?au.play():au.pause()};
+au.addEventListener("play",sync); au.addEventListener("pause",sync);
+au.addEventListener("ended",()=>{   // the next song in the list plays on
+  const all=SETS[current.set].flatMap(([,s])=>s); const i=all.findIndex(s=>s[0]===current.file);
+  if(i>=0&&i+1<all.length){const [f,t]=all[i+1]; const keep=set; set=current.set; pick(f,t); set=keep; sync()}
+});
+au.addEventListener("loadedmetadata",()=>{document.getElementById("tLen").textContent=fmt(au.duration)});
+au.addEventListener("timeupdate",()=>{document.getElementById("tCur").textContent=fmt(au.currentTime);if(au.duration)document.getElementById("seek").value=au.currentTime/au.duration*1000});
+document.getElementById("seek").oninput=e=>{if(au.duration)au.currentTime=e.target.value/1000*au.duration};
+for(const [id,name] of [["p2","Runeheim II"],["p1","Runeheim I"]]) document.getElementById(id).onclick=()=>{set=name;document.getElementById("p2").setAttribute("aria-pressed",name==="Runeheim II");document.getElementById("p1").setAttribute("aria-pressed",name==="Runeheim I");render()};
+render();
+</script>
+</body>
+</html>
